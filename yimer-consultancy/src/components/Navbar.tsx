@@ -1,5 +1,5 @@
-// components/Navbar.tsx (full version with routing)
-import React, { useState } from 'react';
+// components/Navbar.tsx
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../components/ThemeContext';
@@ -8,6 +8,7 @@ export const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const isDark = isDarkMode;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
   const navLinks = [
@@ -16,6 +17,32 @@ export const Navbar: React.FC = () => {
     { name: 'Services', href: '/services' },
     { name: 'Contact', href: '/contact' },
   ];
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
 
   return (
     <>
@@ -67,25 +94,27 @@ export const Navbar: React.FC = () => {
         }
       `}</style>
 
-      <nav className="fixed top-0 left-0 right-0 z-50 px-4 pt-6 poppins">
+      <nav className={`fixed top-0 left-0 right-0 z-50 px-4 pt-6 poppins transition-all duration-300 ${isScrolled ? 'pt-3' : 'pt-6'}`}>
         <div className="max-w-6xl mx-auto">
           <div className={`
             relative overflow-hidden
             flex items-center justify-between h-16 px-6 rounded-2xl
             border shadow-2xl grain-overlay
+            transition-all duration-300
+            ${isScrolled ? 'h-14 px-5' : 'h-16 px-6'}
             ${isDark 
               ? 'glass-rough-dark bg-black/80 border-white/8 shadow-black/60' 
               : 'glass-rough-light bg-white/70 border-black/8 shadow-gray-200/50'
             }
           `}>
             {/* Logo */}
-            <Link to="/" className="relative z-10">
+            <Link to="/" className="relative z-10" onClick={() => setIsMenuOpen(false)}>
               <div className="flex items-baseline gap-1">
-                <span className={`font-extrabold text-xl tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <span className={`font-extrabold tracking-tight transition-all duration-300 ${isScrolled ? 'text-lg' : 'text-xl'} ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   Yimer
                 </span>
-                <span className="font-light text-lg tracking-wide text-gray-400">|</span>
-                <span className="font-medium text-lg tracking-wide bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                <span className={`font-light tracking-wide text-gray-400 transition-all duration-300 ${isScrolled ? 'text-base' : 'text-lg'}`}>|</span>
+                <span className={`font-medium tracking-wide bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent transition-all duration-300 ${isScrolled ? 'text-base' : 'text-lg'}`}>
                   Consultancy
                 </span>
               </div>
@@ -148,6 +177,7 @@ export const Navbar: React.FC = () => {
                 onClick={toggleTheme}
                 className={`
                   p-2 rounded-lg transition-all duration-200
+                  hover:scale-105 active:scale-95
                   ${isDark 
                     ? 'bg-white/15 hover:bg-white/25 text-amber-400' 
                     : 'bg-black/5 hover:bg-black/10 text-gray-700'
@@ -162,6 +192,7 @@ export const Navbar: React.FC = () => {
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className={`
                   p-2 rounded-lg transition-all duration-200
+                  hover:scale-105 active:scale-95
                   ${isDark 
                     ? 'bg-white/15 hover:bg-white/25' 
                     : 'bg-black/5 hover:bg-black/10'
@@ -180,7 +211,7 @@ export const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       {isMenuOpen && (
         <>
           <div 
