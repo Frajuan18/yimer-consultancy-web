@@ -8,9 +8,6 @@ import {
   Rocket, 
   ArrowRight,
   CheckCircle,
-  Shield,
-  Target,
-  Zap,
   Heart
 } from 'lucide-react';
 

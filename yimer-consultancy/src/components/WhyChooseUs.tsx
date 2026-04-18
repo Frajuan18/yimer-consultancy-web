@@ -6,9 +6,7 @@ import {
   TrendingUp, 
   Globe, 
   Users, 
-  CheckCircle,
   Star,
-  Clock,
   Headphones,
   ArrowRight
 } from 'lucide-react';

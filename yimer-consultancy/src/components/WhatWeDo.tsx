@@ -8,8 +8,7 @@ import {
   TrendingUp, 
   ArrowRight, 
   CheckCircle,
-  Rocket,
-  Sparkles
+  Rocket
 } from 'lucide-react';
 
 export const WhatWeDo: React.FC = () => {

@@ -1,7 +1,7 @@
 // Hero.tsx
 import React, { useState } from 'react';
 import { useTheme } from './ThemeContext';
-import { ArrowRight, ChevronRight, Shield, Zap, TrendingUp, CheckCircle, Users, Clock, Target, LineChart, Headphones, Briefcase, BarChart, Award } from 'lucide-react';
+import { ArrowRight, ChevronRight, Shield, Zap, TrendingUp,  Target, LineChart, Headphones, Briefcase, BarChart, Award } from 'lucide-react';
 
 export const Hero: React.FC = () => {
   const { isDarkMode } = useTheme();

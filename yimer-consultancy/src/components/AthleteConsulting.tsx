@@ -2,14 +2,11 @@
 import React, { useState } from 'react';
 import { useTheme } from '../components/ThemeContext';
 import { 
-  ArrowRight, 
-  Sparkles,
+  ArrowRight,
   Trophy,
   Star,
   Briefcase,
   Globe,
-  TrendingUp,
-  Award,
   CheckCircle,
   X
 } from 'lucide-react';
