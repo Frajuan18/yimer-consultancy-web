@@ -34,7 +34,6 @@ export const Navbar: React.FC = () => {
     };
   }, [isMenuOpen]);
 
-  // Toggle menu function
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -84,12 +83,12 @@ export const Navbar: React.FC = () => {
         
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         
-        .poppins {
+        * {
           font-family: 'Poppins', sans-serif;
         }
       `}</style>
 
-      <nav className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 poppins">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-4 pt-4" style={{ fontFamily: 'Poppins, sans-serif' }}>
         <div className="max-w-6xl mx-auto">
           <div className={`
             relative overflow-hidden
@@ -101,7 +100,7 @@ export const Navbar: React.FC = () => {
               : 'glass-rough-light bg-white/70 border-black/8 shadow-gray-200/50'
             }
           `}>
-            {/* Logo - Smaller font on mobile */}
+            {/* Logo */}
             <Link to="/" className="relative z-10" onClick={() => setIsMenuOpen(false)}>
               <div className="flex items-baseline gap-1">
                 <span className={`font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'} text-base sm:text-xl`}>
@@ -121,8 +120,7 @@ export const Navbar: React.FC = () => {
                   key={link.name}
                   to={link.href}
                   className={`
-                    text-sm font-medium
-                    transition-all duration-200
+                    text-sm font-medium transition-all duration-200
                     relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px]
                     after:bg-gradient-to-r after:from-blue-500 after:to-purple-500
                     after:transition-all after:duration-300 hover:after:w-full
@@ -205,25 +203,29 @@ export const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay - Always accessible */}
+      {/* Mobile Menu */}
       {isMenuOpen && (
-        <>
+        <div className="fixed inset-0 z-40 md:hidden">
+          {/* Backdrop */}
           <div 
-            className={`fixed inset-0 z-40 md:hidden transition-all duration-300 backdrop-blur-sm ${isDark ? 'bg-black/70' : 'bg-white/60'}`}
+            className={`absolute inset-0 transition-all duration-300 backdrop-blur-sm ${isDark ? 'bg-black/70' : 'bg-white/60'}`}
             onClick={toggleMenu}
           />
           
-          <div className={`
-            fixed top-[68px] left-4 right-4 z-40 md:hidden
-            rounded-2xl p-6
-            border shadow-2xl
-            animate-slide-in grain-overlay
-            overflow-hidden
-            ${isDark 
-              ? 'bg-black/90 border-white/8' 
-              : 'bg-white/95 border-black/8'
-            }
-          `}>
+          {/* Menu Panel */}
+          <div 
+            className={`
+              absolute top-[72px] left-4 right-4
+              rounded-2xl p-6
+              border shadow-2xl
+              animate-slide-in grain-overlay
+              ${isDark 
+                ? 'bg-black/90 border-white/8' 
+                : 'bg-white/95 border-black/8'
+              }
+            `}
+            style={{ fontFamily: 'Poppins, sans-serif' }}
+          >
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <Link
@@ -239,13 +241,17 @@ export const Navbar: React.FC = () => {
                     }
                   `}
                   onClick={toggleMenu}
+                  style={{ fontFamily: 'Poppins, sans-serif' }}
                 >
                   {link.name}
                 </Link>
               ))}
               <div className="pt-4 mt-2">
                 <Link to="/contact" onClick={toggleMenu}>
-                  <button className="w-full px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95 relative overflow-hidden">
+                  <button 
+                    className="w-full px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95 relative overflow-hidden"
+                    style={{ fontFamily: 'Poppins, sans-serif' }}
+                  >
                     <div className={`absolute inset-0 transition-all duration-300 ${isDark ? 'bg-white' : 'bg-gray-900'}`} />
                     <div className={`absolute inset-[1px] rounded-xl transition-all duration-300 ${isDark ? 'bg-black/5' : 'bg-white/10'}`} />
                     <span className={`relative z-10 transition-all duration-300 font-semibold ${isDark ? 'text-gray-900' : 'text-white'}`}>
@@ -256,7 +262,7 @@ export const Navbar: React.FC = () => {
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );
