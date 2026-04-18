@@ -8,7 +8,6 @@ export const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const isDark = isDarkMode;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
   const navLinks = [
@@ -17,15 +16,6 @@ export const Navbar: React.FC = () => {
     { name: 'Services', href: '/services' },
     { name: 'Contact', href: '/contact' },
   ];
-
-  // Handle scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -224,7 +214,7 @@ export const Navbar: React.FC = () => {
           />
           
           <div className={`
-            fixed top-[72px] left-4 right-4 z-40 md:hidden
+            fixed top-[68px] left-4 right-4 z-40 md:hidden
             rounded-2xl p-6
             border shadow-2xl
             animate-slide-in grain-overlay
