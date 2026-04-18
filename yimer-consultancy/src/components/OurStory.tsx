@@ -2,9 +2,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTheme } from '../components/ThemeContext';
 import { 
-  Quote, Sparkles, ArrowRight, Calendar, Users, Globe, Award, 
-  Target, Rocket, Zap, Heart, Star, Play, Pause, ChevronLeft, 
-  ChevronRight, Clock, Briefcase, TrendingUp, Shield, Lightbulb,
+  Quote, Globe, Award, Zap, Star, Play, Pause, ChevronLeft, 
+  ChevronRight, Clock, TrendingUp, Users, Lightbulb,
   CheckCircle, RotateCcw
 } from 'lucide-react';
 
@@ -15,8 +14,8 @@ export const OurStory: React.FC = () => {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [hoveredMilestone, setHoveredMilestone] = useState<number | null>(null);
   const [timeRemaining, setTimeRemaining] = useState(60);
-  const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const chapters = [
     {
@@ -25,6 +24,7 @@ export const OurStory: React.FC = () => {
       subtitle: 'A Bold Vision',
       icon: Lightbulb,
       color: 'text-blue-500',
+      strokeColor: '#3B82F6',
       bgColor: 'bg-blue-500/10',
       borderColor: 'border-blue-500/30',
       fullStory: `It started with a simple belief: businesses deserved more than generic advice. In a small office with just two chairs, a laptop, and an unwavering vision, Yimer Consultancy was born. We weren't just another consulting firm - we were on a mission to become genuine partners in our clients' success.
@@ -39,6 +39,7 @@ Those first months were challenging. We worked late nights, turned down projects
       subtitle: 'Team & Trust',
       icon: Users,
       color: 'text-green-500',
+      strokeColor: '#22C55E',
       bgColor: 'bg-green-500/10',
       borderColor: 'border-green-500/30',
       fullStory: `By 2016, our small team had grown into a family of 10 passionate experts. We moved into a bigger space - walls covered in strategy maps, whiteboards filled with ideas, and the constant hum of collaboration.
@@ -55,6 +56,7 @@ That year, we also launched our first mentorship program, investing in the next 
       subtitle: 'International Expansion',
       icon: Globe,
       color: 'text-cyan-500',
+      strokeColor: '#06B6D4',
       bgColor: 'bg-cyan-500/10',
       borderColor: 'border-cyan-500/30',
       fullStory: `2018 was the year we spread our wings. When a European tech company reached out for help scaling their operations, we didn't hesitate. We assembled a team, flew across the Atlantic, and delivered results that exceeded every expectation.
@@ -71,6 +73,7 @@ The challenges of cross-cultural consulting taught us invaluable lessons about a
       subtitle: 'Adapting & Thriving',
       icon: Zap,
       color: 'text-amber-500',
+      strokeColor: '#F59E0B',
       bgColor: 'bg-amber-500/10',
       borderColor: 'border-amber-500/30',
       fullStory: `When the world changed overnight in 2020, we didn't retreat - we reinvented. While others paused, we accelerated. We launched our Digital Transformation practice, helping businesses not just survive but thrive in the new normal.
@@ -87,6 +90,7 @@ The result? We helped over 100 businesses pivot successfully. Many of our client
       subtitle: '500 & Beyond',
       icon: Award,
       color: 'text-purple-500',
+      strokeColor: '#A855F7',
       bgColor: 'bg-purple-500/10',
       borderColor: 'border-purple-500/30',
       fullStory: `By 2022, we had crossed a milestone that once seemed impossible: 500 successful clients. But more than the number, what mattered was the impact. Our clients had achieved over $500M in collective growth, created thousands of jobs, and transformed their industries.
@@ -103,6 +107,7 @@ That year, we also launched our proprietary strategy framework, codifying everyt
       subtitle: 'The Future Unfolds',
       icon: Star,
       color: 'text-rose-500',
+      strokeColor: '#F43F5E',
       bgColor: 'bg-rose-500/10',
       borderColor: 'border-rose-500/30',
       fullStory: `Today, Yimer Consultancy stands as a beacon of excellence in the consulting world. With a team of 50+ experts, offices across three continents, and a portfolio of 500+ successful clients, we've proven that our approach works.
@@ -319,7 +324,7 @@ The future holds endless possibilities. New markets to enter, new challenges to 
                               cy="20"
                               r={radius}
                               fill="none"
-                              stroke={chapter.color.replace('text', '').trim()}
+                              stroke={chapter.strokeColor}
                               strokeWidth="2"
                               strokeLinecap="round"
                               strokeDasharray={circumference}
