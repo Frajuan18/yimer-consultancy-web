@@ -44,6 +44,11 @@ export const Navbar: React.FC = () => {
     };
   }, [isMenuOpen]);
 
+  // Toggle menu function
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <>
       <style>{`
@@ -94,34 +99,33 @@ export const Navbar: React.FC = () => {
         }
       `}</style>
 
-      <nav className={`fixed top-0 left-0 right-0 z-50 px-4 pt-6 poppins transition-all duration-300 ${isScrolled ? 'pt-3' : 'pt-6'}`}>
+      <nav className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 poppins">
         <div className="max-w-6xl mx-auto">
           <div className={`
             relative overflow-hidden
-            flex items-center justify-between h-16 px-6 rounded-2xl
+            flex items-center justify-between px-4 py-2 rounded-2xl
             border shadow-2xl grain-overlay
             transition-all duration-300
-            ${isScrolled ? 'h-14 px-5' : 'h-16 px-6'}
             ${isDark 
               ? 'glass-rough-dark bg-black/80 border-white/8 shadow-black/60' 
               : 'glass-rough-light bg-white/70 border-black/8 shadow-gray-200/50'
             }
           `}>
-            {/* Logo */}
+            {/* Logo - Smaller font on mobile */}
             <Link to="/" className="relative z-10" onClick={() => setIsMenuOpen(false)}>
               <div className="flex items-baseline gap-1">
-                <span className={`font-extrabold tracking-tight transition-all duration-300 ${isScrolled ? 'text-lg' : 'text-xl'} ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <span className={`font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'} text-base sm:text-xl`}>
                   Yimer
                 </span>
-                <span className={`font-light tracking-wide text-gray-400 transition-all duration-300 ${isScrolled ? 'text-base' : 'text-lg'}`}>|</span>
-                <span className={`font-medium tracking-wide bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent transition-all duration-300 ${isScrolled ? 'text-base' : 'text-lg'}`}>
+                <span className={`font-light tracking-wide text-gray-400 text-sm sm:text-lg`}>|</span>
+                <span className={`font-medium tracking-wide bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent text-sm sm:text-lg`}>
                   Consultancy
                 </span>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8 relative z-10">
+            <div className="hidden md:flex items-center gap-6 relative z-10">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
@@ -161,7 +165,7 @@ export const Navbar: React.FC = () => {
               </button>
 
               <Link to="/contact">
-                <button className="group relative px-5 py-2 rounded-lg overflow-hidden text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95">
+                <button className="group relative px-4 py-1.5 rounded-lg overflow-hidden text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95">
                   <div className={`absolute inset-0 transition-all duration-300 ${isDark ? 'bg-white' : 'bg-gray-900'}`} />
                   <div className={`absolute inset-[1px] rounded-lg transition-all duration-300 ${isDark ? 'bg-black/5' : 'bg-white/10'}`} />
                   <span className={`relative z-10 transition-all duration-300 font-semibold ${isDark ? 'text-gray-900' : 'text-white'}`}>
@@ -189,7 +193,7 @@ export const Navbar: React.FC = () => {
               </button>
 
               <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                onClick={toggleMenu}
                 className={`
                   p-2 rounded-lg transition-all duration-200
                   hover:scale-105 active:scale-95
@@ -211,23 +215,23 @@ export const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - Always accessible */}
       {isMenuOpen && (
         <>
           <div 
             className={`fixed inset-0 z-40 md:hidden transition-all duration-300 backdrop-blur-sm ${isDark ? 'bg-black/70' : 'bg-white/60'}`}
-            onClick={() => setIsMenuOpen(false)}
+            onClick={toggleMenu}
           />
           
           <div className={`
-            fixed top-[88px] left-4 right-4 z-40 md:hidden
+            fixed top-[72px] left-4 right-4 z-40 md:hidden
             rounded-2xl p-6
             border shadow-2xl
             animate-slide-in grain-overlay
             overflow-hidden
             ${isDark 
-              ? 'bg-black/85 border-white/8' 
-              : 'bg-white/90 border-black/8'
+              ? 'bg-black/90 border-white/8' 
+              : 'bg-white/95 border-black/8'
             }
           `}>
             <div className="flex flex-col gap-2">
@@ -240,17 +244,17 @@ export const Navbar: React.FC = () => {
                     px-4 py-3 rounded-xl
                     transition-all duration-200
                     ${location.pathname === link.href
-                      ? (isDark ? 'bg-white/10 text-white' : 'bg-black/5 text-gray-900')
-                      : (isDark ? 'text-white/75 hover:text-white hover:bg-white/10' : 'text-gray-600 hover:text-gray-900 hover:bg-black/5')
+                      ? (isDark ? 'bg-white/15 text-white' : 'bg-black/10 text-gray-900')
+                      : (isDark ? 'text-white/80 hover:text-white hover:bg-white/10' : 'text-gray-700 hover:text-gray-900 hover:bg-black/5')
                     }
                   `}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={toggleMenu}
                 >
                   {link.name}
                 </Link>
               ))}
               <div className="pt-4 mt-2">
-                <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/contact" onClick={toggleMenu}>
                   <button className="w-full px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95 relative overflow-hidden">
                     <div className={`absolute inset-0 transition-all duration-300 ${isDark ? 'bg-white' : 'bg-gray-900'}`} />
                     <div className={`absolute inset-[1px] rounded-xl transition-all duration-300 ${isDark ? 'bg-black/5' : 'bg-white/10'}`} />
