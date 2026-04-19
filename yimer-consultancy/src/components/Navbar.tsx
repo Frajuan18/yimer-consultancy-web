@@ -1,4 +1,4 @@
-// components/Navbar.tsx - Perfectly responsive across all devices
+// components/Navbar.tsx - With smaller fonts
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Sun, Moon } from 'lucide-react';
@@ -14,6 +14,7 @@ export const Navbar: React.FC = () => {
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Services', href: '/services' },
+    { name: 'Blog', href: '/blogs' },
     { name: 'Contact', href: '/contact' },
   ];
 
@@ -85,7 +86,6 @@ export const Navbar: React.FC = () => {
           font-family: 'Poppins', sans-serif;
         }
 
-        /* Enhanced responsive utilities */
         .nav-container {
           width: 100%;
           max-width: 1280px;
@@ -93,7 +93,6 @@ export const Navbar: React.FC = () => {
           margin-right: auto;
         }
 
-        /* Responsive padding adjustments */
         @media (max-width: 480px) {
           .nav-padding {
             padding-left: 0.75rem;
@@ -108,12 +107,10 @@ export const Navbar: React.FC = () => {
           }
         }
 
-        /* Smooth transitions for all interactive elements */
         .nav-link, .nav-button {
           transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Prevent text overflow on very small screens */
         .logo-text {
           max-width: 100%;
           white-space: nowrap;
@@ -121,7 +118,6 @@ export const Navbar: React.FC = () => {
           text-overflow: ellipsis;
         }
 
-        /* Mobile menu safe area for notched devices */
         @supports (padding-top: env(safe-area-inset-top)) {
           .mobile-menu-safe {
             padding-top: env(safe-area-inset-top);
@@ -136,7 +132,7 @@ export const Navbar: React.FC = () => {
         <div className="nav-container">
           <div className={`
             relative overflow-hidden
-            flex items-center justify-between px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 rounded-xl xs:rounded-2xl
+            flex items-center justify-between px-3 xs:px-4 sm:px-5 py-1.5 xs:py-1.5 rounded-xl xs:rounded-2xl
             border shadow-lg xs:shadow-xl sm:shadow-2xl grain-overlay
             transition-all duration-300
             ${isDark 
@@ -144,25 +140,25 @@ export const Navbar: React.FC = () => {
               : 'glass-rough-light bg-white/70 border-black/8 shadow-gray-200/50'
             }
           `}>
-            {/* Logo - Optimized for all screen sizes */}
+            {/* Logo - Smaller */}
             <Link to="/" className="relative z-10 flex-shrink min-w-0" onClick={() => setIsMenuOpen(false)}>
               <div className="flex items-baseline gap-0.5 xs:gap-1 logo-text">
                 <span className={`
                   font-extrabold tracking-tight 
                   ${isDark ? 'text-white' : 'text-gray-900'} 
-                  text-sm xs:text-base sm:text-lg md:text-xl
+                  text-xs xs:text-sm sm:text-base
                 `}>
                   Yimer
                 </span>
                 <span className={`
                   font-light tracking-wide text-gray-400 
-                  text-xs xs:text-sm sm:text-base md:text-lg
+                  text-[10px] xs:text-xs sm:text-sm
                 `}>|</span>
                 <span className={`
                   font-medium tracking-wide 
                   bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 
                   bg-clip-text text-transparent 
-                  text-xs xs:text-sm sm:text-base md:text-lg
+                  text-[10px] xs:text-xs sm:text-sm
                   whitespace-nowrap
                 `}>
                   Consultancy
@@ -170,14 +166,14 @@ export const Navbar: React.FC = () => {
               </div>
             </Link>
 
-            {/* Desktop Navigation - Hidden on mobile, visible from md breakpoint */}
-            <div className="hidden lg:flex items-center gap-4 xl:gap-8 relative z-10">
+            {/* Desktop Navigation - Smaller fonts */}
+            <div className="hidden lg:flex items-center gap-3 xl:gap-5 relative z-10">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.href}
                   className={`
-                    text-sm lg:text-base font-medium transition-all duration-200
+                    text-xs lg:text-sm font-medium transition-all duration-200
                     relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px]
                     after:bg-gradient-to-r after:from-blue-500 after:to-purple-500
                     after:transition-all after:duration-300 hover:after:w-full
@@ -192,14 +188,14 @@ export const Navbar: React.FC = () => {
               ))}
             </div>
 
-            {/* Tablet Navigation - Hidden on mobile/desktop, visible on md */}
-            <div className="hidden md:flex lg:hidden items-center gap-3 relative z-10">
+            {/* Tablet Navigation - Smaller fonts */}
+            <div className="hidden md:flex lg:hidden items-center gap-2 relative z-10">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.href}
                   className={`
-                    text-xs md:text-sm font-medium transition-all duration-200
+                    text-[11px] md:text-xs font-medium transition-all duration-200
                     relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px]
                     after:bg-gradient-to-r after:from-blue-500 after:to-purple-500
                     after:transition-all after:duration-300 hover:after:w-full
@@ -214,12 +210,12 @@ export const Navbar: React.FC = () => {
               ))}
             </div>
 
-            {/* Desktop & Tablet CTA & Theme Toggle */}
-            <div className="hidden md:flex items-center gap-1.5 md:gap-2 lg:gap-3 relative z-10">
+            {/* Desktop & Tablet CTA & Theme Toggle - Smaller */}
+            <div className="hidden md:flex items-center gap-1.5 md:gap-2 lg:gap-2 relative z-10">
               <button
                 onClick={toggleTheme}
                 className={`
-                  p-1.5 md:p-2 rounded-lg transition-all duration-200
+                  p-1.5 rounded-lg transition-all duration-200
                   hover:scale-105 active:scale-95
                   ${isDark 
                     ? 'bg-white/15 hover:bg-white/25 text-amber-400' 
@@ -228,11 +224,11 @@ export const Navbar: React.FC = () => {
                 `}
                 aria-label="Toggle theme"
               >
-                {isDark ? <Sun className="w-3.5 h-3.5 md:w-4 md:h-4" /> : <Moon className="w-3.5 h-3.5 md:w-4 md:h-4" />}
+                {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
               </button>
 
               <Link to="/contact">
-                <button className="group relative px-3 md:px-4 lg:px-5 py-1.5 md:py-2 rounded-lg overflow-hidden text-xs md:text-sm lg:text-base font-semibold transition-all duration-200 hover:scale-105 active:scale-95">
+                <button className="group relative px-2.5 md:px-3 lg:px-4 py-1 rounded-lg overflow-hidden text-[11px] md:text-xs lg:text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95">
                   <div className={`absolute inset-0 transition-all duration-300 ${isDark ? 'bg-white' : 'bg-gray-900'}`} />
                   <div className={`absolute inset-[1px] rounded-lg transition-all duration-300 ${isDark ? 'bg-black/5' : 'bg-white/10'}`} />
                   <span className={`relative z-10 transition-all duration-300 font-semibold ${isDark ? 'text-gray-900' : 'text-white'}`}>
@@ -242,12 +238,12 @@ export const Navbar: React.FC = () => {
               </Link>
             </div>
 
-            {/* Mobile Controls - Visible only on mobile */}
-            <div className="flex md:hidden items-center gap-1 xs:gap-2 relative z-10">
+            {/* Mobile Controls - Smaller */}
+            <div className="flex md:hidden items-center gap-1 xs:gap-1.5 relative z-10">
               <button
                 onClick={toggleTheme}
                 className={`
-                  p-1.5 xs:p-2 rounded-lg transition-all duration-200
+                  p-1.5 rounded-lg transition-all duration-200
                   hover:scale-105 active:scale-95
                   ${isDark 
                     ? 'bg-white/15 hover:bg-white/25 text-amber-400' 
@@ -256,13 +252,13 @@ export const Navbar: React.FC = () => {
                 `}
                 aria-label="Toggle theme"
               >
-                {isDark ? <Sun className="w-3.5 h-3.5 xs:w-4 xs:h-4" /> : <Moon className="w-3.5 h-3.5 xs:w-4 xs:h-4" />}
+                {isDark ? <Sun className="w-3 h-3 xs:w-3.5 xs:h-3.5" /> : <Moon className="w-3 h-3 xs:w-3.5 xs:h-3.5" />}
               </button>
 
               <button
                 onClick={toggleMenu}
                 className={`
-                  p-1.5 xs:p-2 rounded-lg transition-all duration-200
+                  p-1.5 rounded-lg transition-all duration-200
                   hover:scale-105 active:scale-95
                   ${isDark 
                     ? 'bg-white/15 hover:bg-white/25' 
@@ -272,9 +268,9 @@ export const Navbar: React.FC = () => {
                 aria-label="Toggle menu"
               >
                 {isMenuOpen ? (
-                  <X className={`w-4 h-4 xs:w-5 xs:h-5 ${isDark ? 'text-white' : 'text-gray-900'}`} />
+                  <X className={`w-3.5 h-3.5 xs:w-4 xs:h-4 ${isDark ? 'text-white' : 'text-gray-900'}`} />
                 ) : (
-                  <Menu className={`w-4 h-4 xs:w-5 xs:h-5 ${isDark ? 'text-white' : 'text-gray-900'}`} />
+                  <Menu className={`w-3.5 h-3.5 xs:w-4 xs:h-4 ${isDark ? 'text-white' : 'text-gray-900'}`} />
                 )}
               </button>
             </div>
@@ -282,7 +278,7 @@ export const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu - Full responsive overlay */}
+      {/* Mobile Menu - Smaller fonts */}
       {isMenuOpen && (
         <div className="fixed inset-0 z-[100] md:hidden mobile-menu-safe">
           <div 
@@ -292,10 +288,10 @@ export const Navbar: React.FC = () => {
           
           <div 
             className={`
-              absolute top-[60px] xs:top-[68px] sm:top-[72px] 
+              absolute top-[60px] xs:top-[65px] sm:top-[70px] 
               left-2 xs:left-3 sm:left-4 right-2 xs:right-3 sm:right-4
               max-w-md mx-auto
-              rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6
+              rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-5
               border shadow-xl xs:shadow-2xl
               animate-slide-in grain-overlay
               ${isDark 
@@ -311,8 +307,8 @@ export const Navbar: React.FC = () => {
                   key={link.name}
                   to={link.href}
                   className={`
-                    text-sm xs:text-base font-medium
-                    px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl
+                    text-xs xs:text-sm font-medium
+                    px-3 xs:px-4 py-2 xs:py-2.5 rounded-lg xs:rounded-xl
                     transition-all duration-200
                     ${location.pathname === link.href
                       ? (isDark ? 'bg-white/20 text-white' : 'bg-black/10 text-gray-900')
@@ -325,10 +321,10 @@ export const Navbar: React.FC = () => {
                   {link.name}
                 </Link>
               ))}
-              <div className="pt-3 xs:pt-4 mt-1 xs:mt-2">
+              <div className="pt-3 xs:pt-4 mt-1">
                 <Link to="/contact" onClick={toggleMenu}>
                   <button 
-                    className="w-full px-4 xs:px-5 py-2.5 xs:py-3 rounded-lg xs:rounded-xl text-sm xs:text-base font-semibold transition-all duration-200 active:scale-95 relative overflow-hidden"
+                    className="w-full px-4 xs:px-5 py-2 xs:py-2.5 rounded-lg xs:rounded-xl text-xs xs:text-sm font-semibold transition-all duration-200 active:scale-95 relative overflow-hidden"
                     style={{ fontFamily: 'Poppins, sans-serif' }}
                   >
                     <div className={`absolute inset-0 transition-all duration-300 ${isDark ? 'bg-white' : 'bg-gray-900'}`} />
