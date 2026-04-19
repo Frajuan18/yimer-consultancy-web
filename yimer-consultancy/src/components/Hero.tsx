@@ -1,4 +1,4 @@
-// Hero.tsx - Mobile optimized with right side below on mobile
+// Hero.tsx - Fixed to show both sides on all pages
 import React, { useState } from 'react';
 import { useTheme } from './ThemeContext';
 import { ArrowRight, ChevronRight, Shield, Zap, TrendingUp, Target, LineChart, Headphones, Briefcase, BarChart, Award } from 'lucide-react';
@@ -66,11 +66,11 @@ export const Hero: React.FC = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Stack on mobile, side by side on desktop */}
-        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12">
+        {/* Two column layout - stacks on mobile, side by side on desktop */}
+        <div className="flex flex-col lg:flex-row lg:gap-12">
           
-          {/* LEFT SIDE - Content */}
-          <div className="order-1">
+          {/* LEFT SIDE - Content (60% width on desktop) */}
+          <div className="flex-1 lg:flex-[2]">
             {/* Badge */}
             <div className="inline-block mb-4">
               <span className={`
@@ -85,7 +85,7 @@ export const Hero: React.FC = () => {
               </span>
             </div>
 
-            {/* Main Heading - Smaller on mobile */}
+            {/* Main Heading */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight">
               <span className={isDark ? 'text-white' : 'text-gray-900'}>
                 Transform Your
@@ -96,7 +96,7 @@ export const Hero: React.FC = () => {
               </span>
             </h1>
 
-            {/* Description - Compact on mobile */}
+            {/* Description */}
             <p className={`
               text-sm sm:text-base mb-6 max-w-lg leading-relaxed
               ${isDark ? 'text-white/60' : 'text-gray-600'}
@@ -105,7 +105,7 @@ export const Hero: React.FC = () => {
               and sustainable success. Let our experts guide you.
             </p>
 
-            {/* Features List - Compact on mobile */}
+            {/* Features List */}
             <div className="space-y-2 mb-6">
               {features.map((feature, idx) => (
                 <div
@@ -117,30 +117,25 @@ export const Hero: React.FC = () => {
                   <div className={`
                     relative p-3 rounded-xl transition-all duration-300 ease-out cursor-pointer
                     ${hoveredFeature === idx 
-                      ? (isDark 
-                          ? 'bg-white/20' 
-                          : 'bg-gray-100')
-                      : (isDark 
-                          ? 'bg-white/5 hover:bg-white/10' 
-                          : 'bg-gray-50 hover:bg-gray-100')
+                      ? (isDark ? 'bg-white/20' : 'bg-gray-100')
+                      : (isDark ? 'bg-white/5 hover:bg-white/10' : 'bg-gray-50 hover:bg-gray-100')
                     }
                   `}>
                     <div className="flex items-start gap-2">
-                      <feature.icon className={`w-4 h-4 mt-0.5 flex-shrink-0 transition-colors duration-200 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                      <feature.icon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between flex-wrap gap-1">
-                          <h3 className={`text-sm font-semibold transition-colors duration-200 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          <h3 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                             {feature.title}
                           </h3>
-                          <ChevronRight className={`w-3 h-3 transition-all duration-300 ease-out ${hoveredFeature === idx ? 'translate-x-1' : ''} ${isDark ? 'text-white/40' : 'text-gray-400'}`} />
+                          <ChevronRight className={`w-3 h-3 transition-all duration-300 ${hoveredFeature === idx ? 'translate-x-1' : ''} ${isDark ? 'text-white/40' : 'text-gray-400'}`} />
                         </div>
-                        <p className={`text-xs mt-0.5 transition-colors duration-200 ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
+                        <p className={`text-xs mt-0.5 ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
                           {feature.description}
                         </p>
                         
-                        {/* Expanded Info on Hover */}
                         {hoveredFeature === idx && (
-                          <div className={`mt-2 pt-2 border-t transition-all duration-300 ease-out animate-fade-in ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
+                          <div className={`mt-2 pt-2 border-t animate-fade-in ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
                             <p className={`text-xs mb-1 ${isDark ? 'text-white/70' : 'text-gray-700'}`}>
                               {feature.details}
                             </p>
@@ -159,12 +154,12 @@ export const Hero: React.FC = () => {
               ))}
             </div>
 
-            {/* CTA Buttons - Full width on mobile */}
+            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center gap-3 mb-8">
               <button className="group relative w-full sm:w-auto px-6 py-2.5 rounded-lg overflow-hidden text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95">
                 <div className={`absolute inset-0 transition-all duration-300 ${isDark ? 'bg-white' : 'bg-gray-900'}`} />
                 <div className={`absolute inset-[1px] rounded-lg transition-all duration-300 ${isDark ? 'bg-black/5' : 'bg-white/10'}`} />
-                <span className={`relative z-10 flex items-center justify-center gap-2 transition-all duration-300 font-semibold ${isDark ? 'text-gray-900' : 'text-white'}`}>
+                <span className={`relative z-10 flex items-center justify-center gap-2 font-semibold ${isDark ? 'text-gray-900' : 'text-white'}`}>
                   Get Started
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </span>
@@ -184,7 +179,7 @@ export const Hero: React.FC = () => {
               </button>
             </div>
 
-            {/* Stats - Responsive grid */}
+            {/* Stats */}
             <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {stats.map((stat, idx) => (
                 <div key={idx} className="text-center">
@@ -199,8 +194,8 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* RIGHT SIDE - Glass Card (Below left side on mobile, side by side on desktop) */}
-          <div className="order-2 lg:sticky lg:top-32">
+          {/* RIGHT SIDE - Core Services Card (40% width on desktop) */}
+          <div className="mt-8 lg:mt-0 lg:flex-1">
             <div className={`
               relative rounded-2xl p-5 md:p-6
               border shadow-2xl grain-overlay
@@ -231,7 +226,7 @@ export const Hero: React.FC = () => {
                   Comprehensive consulting services tailored to your business needs.
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+                <div className="space-y-2 mb-4">
                   {coreServices.map((service, idx) => (
                     <div
                       key={idx}
@@ -298,7 +293,7 @@ export const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator - Hidden on mobile */}
+      {/* Scroll Indicator */}
       <div className="hidden sm:block absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <div className={`w-6 h-10 rounded-full border-2 flex justify-center ${
           isDark ? 'border-white/30' : 'border-gray-300'
