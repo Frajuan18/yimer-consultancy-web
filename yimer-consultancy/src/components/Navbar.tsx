@@ -1,4 +1,4 @@
-// components/Navbar.tsx - Fixed width and icon alignment
+// components/Navbar.tsx - Consistent across all pages
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Sun, Moon } from 'lucide-react';
@@ -98,7 +98,7 @@ export const Navbar: React.FC = () => {
               : 'glass-rough-light bg-white/70 border-black/8 shadow-gray-200/50'
             }
           `}>
-            {/* Logo - Fixed width */}
+            {/* Logo */}
             <Link to="/" className="relative z-10 flex-shrink-0" onClick={() => setIsMenuOpen(false)}>
               <div className="flex items-baseline gap-1">
                 <span className={`font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'} text-base sm:text-xl`}>
@@ -111,7 +111,7 @@ export const Navbar: React.FC = () => {
               </div>
             </Link>
 
-            {/* Desktop Navigation - Center */}
+            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8 relative z-10">
               {navLinks.map((link) => (
                 <Link
@@ -161,7 +161,7 @@ export const Navbar: React.FC = () => {
               </Link>
             </div>
 
-            {/* Mobile Controls - All icons on the right */}
+            {/* Mobile Controls */}
             <div className="flex md:hidden items-center gap-2 relative z-10">
               <button
                 onClick={toggleTheme}

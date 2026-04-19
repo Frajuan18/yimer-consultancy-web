@@ -1,5 +1,5 @@
-// App.tsx
-
+// App.tsx - Make sure consistent layout
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './components/ThemeContext';
 import { Navbar } from './components/Navbar';
@@ -7,6 +7,7 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Services } from './pages/Services';
+
 
 function App() {
   return (
