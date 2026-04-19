@@ -1,5 +1,4 @@
-// App.tsx - Make sure consistent layout
-import React from 'react';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './components/ThemeContext';
 import { Navbar } from './components/Navbar';
