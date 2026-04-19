@@ -1,5 +1,5 @@
-// SuccessHighlights.tsx
-import React, { useState } from 'react';
+// SuccessHighlights.tsx - Fully responsive across all devices
+import React, { useState, useEffect } from 'react';
 import { useTheme } from './ThemeContext';
 import { 
   Users, 
@@ -17,6 +17,20 @@ export const SuccessHighlights: React.FC = () => {
   const { isDarkMode } = useTheme();
   const isDark = isDarkMode;
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const stats = [
     {
@@ -88,8 +102,33 @@ export const SuccessHighlights: React.FC = () => {
     setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
+  // Touch swipe handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    
+    if (isLeftSwipe) {
+      nextTestimonial();
+    }
+    if (isRightSwipe) {
+      prevTestimonial();
+    }
+  };
+
   return (
-    <section className={`relative py-24 poppins ${isDark ? 'bg-black' : 'bg-white'}`}>
+    <section className={`relative py-12 xs:py-16 sm:py-20 lg:py-24 poppins ${isDark ? 'bg-black' : 'bg-white'}`}>
       {/* Background */}
       <div className="absolute inset-0 -z-10 transition-colors duration-500">
         <div className={`absolute inset-0 transition-colors duration-500 ${isDark ? 'bg-black' : 'bg-white'}`}>
@@ -108,12 +147,13 @@ export const SuccessHighlights: React.FC = () => {
         }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-6xl xl:max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-block mb-4">
+        <div className="text-center mb-8 xs:mb-12 sm:mb-16">
+          <div className="inline-block mb-3 xs:mb-4">
             <span className={`
-              text-sm font-medium px-4 py-1.5 rounded-full
+              text-[10px] xs:text-xs sm:text-sm font-medium 
+              px-3 xs:px-4 py-1 xs:py-1.5 rounded-full
               transition-all duration-200
               ${isDark 
                 ? 'bg-white/10 text-white/80' 
@@ -123,50 +163,66 @@ export const SuccessHighlights: React.FC = () => {
               Success Highlights
             </span>
           </div>
-          <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <h2 className={`
+            text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 xs:mb-4 px-2
+            ${isDark ? 'text-white' : 'text-gray-900'}
+          `}>
             Real Results That
-            <br />
+            <br className="hidden xs:block" />
+            <span className="xs:hidden"> </span>
             <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               Speak for Themselves
             </span>
           </h2>
-          <p className={`max-w-2xl mx-auto text-base sm:text-lg ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
+          <p className={`
+            max-w-2xl mx-auto text-xs xs:text-sm sm:text-base lg:text-lg px-4
+            ${isDark ? 'text-white/60' : 'text-gray-600'}
+          `}>
             Measurable outcomes and genuine client satisfaction
           </p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+        {/* Stats Grid - Fully responsive */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-4 lg:gap-6 mb-12 xs:mb-16 sm:mb-20">
           {stats.map((stat, idx) => (
             <div
               key={idx}
               className={`
-                group relative rounded-2xl p-6 text-center
-                border-2 transition-all duration-500 ease-out
+                group relative rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-6 text-center
+                border transition-all duration-500 ease-out
                 grain-overlay cursor-pointer
                 ${isDark 
-                  ? 'bg-black/60 border-white/8 hover:bg-black/70 hover:border-white/20' 
-                  : 'bg-white/80 border-gray-200 hover:bg-white hover:border-gray-300'
+                  ? 'bg-black/60 border-white/8 md:hover:bg-black/70 md:hover:border-white/20' 
+                  : 'bg-white/80 border-gray-200 md:hover:bg-white md:hover:border-gray-300'
                 }
-                hover:scale-[1.02] hover:-translate-y-1
-                hover:shadow-2xl
+                ${!isMobile ? 'md:hover:scale-[1.02] md:hover:-translate-y-1' : ''}
+                ${!isMobile ? 'md:hover:shadow-2xl' : 'active:scale-[0.99]'}
               `}
             >
               <div className={`
-                inline-flex p-3 rounded-xl mb-3
+                inline-flex p-2 xs:p-2.5 sm:p-3 rounded-lg xs:rounded-xl mb-2 xs:mb-3
                 ${stat.bgIcon}
                 transition-all duration-500 ease-out
-                group-hover:scale-110
+                ${!isMobile ? 'md:group-hover:scale-110' : ''}
               `}>
-                <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                <stat.icon className={`w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 ${stat.color}`} />
               </div>
-              <div className={`text-2xl md:text-3xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              <div className={`
+                text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold mb-0.5 xs:mb-1 
+                ${isDark ? 'text-white' : 'text-gray-900'}
+              `}>
                 {stat.value}
               </div>
-              <div className={`text-sm font-medium mb-1 ${isDark ? 'text-white/70' : 'text-gray-700'}`}>
+              <div className={`
+                text-[10px] xs:text-xs sm:text-sm font-medium mb-0.5 xs:mb-1 
+                ${isDark ? 'text-white/70' : 'text-gray-700'}
+              `}>
                 {stat.label}
               </div>
-              <div className={`text-xs ${isDark ? 'text-white/40' : 'text-gray-500'}`}>
+              <div className={`
+                text-[8px] xs:text-[10px] sm:text-xs 
+                ${isDark ? 'text-white/40' : 'text-gray-500'}
+              `}>
                 {stat.description}
               </div>
             </div>
@@ -174,113 +230,138 @@ export const SuccessHighlights: React.FC = () => {
         </div>
 
         {/* Testimonials Section */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-            <span className={`text-sm font-medium ${isDark ? 'text-white/70' : 'text-gray-700'}`}>
+        <div className="text-center mb-6 xs:mb-8">
+          <div className="inline-flex items-center gap-1.5 xs:gap-2 mb-3 xs:mb-4">
+            <Star className="w-4 h-4 xs:w-5 xs:h-5 text-yellow-500 fill-yellow-500" />
+            <span className={`text-xs xs:text-sm font-medium ${isDark ? 'text-white/70' : 'text-gray-700'}`}>
               Client Testimonials
             </span>
-            <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+            <Star className="w-4 h-4 xs:w-5 xs:h-5 text-yellow-500 fill-yellow-500" />
           </div>
-          <h3 className={`text-2xl md:text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <h3 className={`
+            text-xl xs:text-2xl md:text-3xl font-bold mb-1.5 xs:mb-2 
+            ${isDark ? 'text-white' : 'text-gray-900'}
+          `}>
             What Our Clients Say
           </h3>
-          <p className={`text-sm ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
+          <p className={`
+            text-[10px] xs:text-xs sm:text-sm 
+            ${isDark ? 'text-white/50' : 'text-gray-500'}
+          `}>
             Trusted by industry leaders worldwide
           </p>
         </div>
 
-        {/* Testimonial Carousel */}
+        {/* Testimonial Carousel - With touch swipe */}
         <div className="max-w-4xl mx-auto">
-          <div className={`
-            relative rounded-2xl p-8 md:p-10
-            border-2 transition-all duration-500 ease-out
-            grain-overlay
-            ${isDark 
-              ? 'bg-black/60 border-white/8' 
-              : 'bg-white/80 border-gray-200'
-            }
-          `}>
+          <div 
+            className={`
+              relative rounded-xl xs:rounded-2xl p-5 xs:p-6 sm:p-8 md:p-10
+              border transition-all duration-500 ease-out
+              grain-overlay
+              ${isDark 
+                ? 'bg-black/60 border-white/8' 
+                : 'bg-white/80 border-gray-200'
+              }
+            `}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
             {/* Quote Icon */}
-            <div className="absolute top-6 right-6 opacity-20">
-              <Quote className={`w-12 h-12 ${isDark ? 'text-white' : 'text-gray-400'}`} />
+            <div className="absolute top-4 right-4 xs:top-6 xs:right-6 opacity-20">
+              <Quote className={`w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 ${isDark ? 'text-white' : 'text-gray-400'}`} />
             </div>
 
             {/* Rating Stars */}
-            <div className="flex gap-1 mb-6">
+            <div className="flex gap-0.5 xs:gap-1 mb-4 xs:mb-6">
               {[...Array(testimonials[activeTestimonial].rating)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                <Star key={i} className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 text-yellow-500 fill-yellow-500" />
               ))}
             </div>
 
             {/* Testimonial Content */}
-            <p className={`text-base md:text-lg leading-relaxed mb-6 relative z-10 ${isDark ? 'text-white/80' : 'text-gray-700'}`}>
+            <p className={`
+              text-sm xs:text-base md:text-lg leading-relaxed mb-4 xs:mb-6 relative z-10
+              ${isDark ? 'text-white/80' : 'text-gray-700'}
+            `}>
               "{testimonials[activeTestimonial].content}"
             </p>
 
             {/* Client Info */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-4">
+              <div className="flex items-center gap-3 xs:gap-4">
                 <div className={`
-                  w-12 h-12 rounded-full flex items-center justify-center
+                  w-10 h-10 xs:w-12 xs:h-12 rounded-full flex items-center justify-center
                   ${isDark ? 'bg-white/10' : 'bg-gray-200'}
                 `}>
-                  <span className={`text-sm font-bold ${isDark ? 'text-white' : 'text-gray-700'}`}>
+                  <span className={`text-xs xs:text-sm font-bold ${isDark ? 'text-white' : 'text-gray-700'}`}>
                     {testimonials[activeTestimonial].image}
                   </span>
                 </div>
                 <div>
-                  <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  <div className={`
+                    font-semibold text-sm xs:text-base
+                    ${isDark ? 'text-white' : 'text-gray-900'}
+                  `}>
                     {testimonials[activeTestimonial].name}
                   </div>
-                  <div className={`text-xs ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
+                  <div className={`
+                    text-[10px] xs:text-xs 
+                    ${isDark ? 'text-white/50' : 'text-gray-500'}
+                  `}>
                     {testimonials[activeTestimonial].role}
                   </div>
                 </div>
               </div>
               
               {/* Navigation Arrows */}
-              <div className="flex gap-2">
+              <div className="flex gap-1.5 xs:gap-2 w-full xs:w-auto justify-end">
                 <button
                   onClick={prevTestimonial}
                   className={`
-                    p-2 rounded-lg transition-all duration-300
+                    p-2 xs:p-2.5 rounded-lg transition-all duration-300
+                    hover:scale-105 active:scale-95
                     ${isDark 
                       ? 'bg-white/10 hover:bg-white/20 text-white' 
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                     }
                   `}
+                  aria-label="Previous testimonial"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-3.5 h-3.5 xs:w-4 xs:h-4" />
                 </button>
                 <button
                   onClick={nextTestimonial}
                   className={`
-                    p-2 rounded-lg transition-all duration-300
+                    p-2 xs:p-2.5 rounded-lg transition-all duration-300
+                    hover:scale-105 active:scale-95
                     ${isDark 
                       ? 'bg-white/10 hover:bg-white/20 text-white' 
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                     }
                   `}
+                  aria-label="Next testimonial"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3.5 h-3.5 xs:w-4 xs:h-4" />
                 </button>
               </div>
             </div>
 
             {/* Dots Indicator */}
-            <div className="flex justify-center gap-2 mt-6">
+            <div className="flex justify-center gap-1.5 xs:gap-2 mt-5 xs:mt-6">
               {testimonials.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setActiveTestimonial(idx)}
                   className={`
-                    w-2 h-2 rounded-full transition-all duration-300
+                    transition-all duration-300 rounded-full
                     ${activeTestimonial === idx 
-                      ? `w-6 ${isDark ? 'bg-white' : 'bg-gray-900'}` 
-                      : isDark ? 'bg-white/30' : 'bg-gray-300'
+                      ? `w-4 xs:w-6 h-1.5 xs:h-2 ${isDark ? 'bg-white' : 'bg-gray-900'}` 
+                      : `w-1.5 xs:w-2 h-1.5 xs:h-2 ${isDark ? 'bg-white/30' : 'bg-gray-300'}`
                     }
                   `}
+                  aria-label={`Go to testimonial ${idx + 1}`}
                 />
               ))}
             </div>
@@ -288,19 +369,25 @@ export const SuccessHighlights: React.FC = () => {
         </div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-12">
-          <button className="group relative px-8 py-3 rounded-lg overflow-hidden text-sm font-semibold transition-all duration-500 ease-out hover:scale-105 active:scale-95">
+        <div className="text-center mt-8 xs:mt-10 sm:mt-12">
+          <button className="group relative px-6 xs:px-8 py-2.5 xs:py-3 rounded-lg overflow-hidden text-xs xs:text-sm font-semibold transition-all duration-500 ease-out hover:scale-105 active:scale-95">
             <div className={`absolute inset-0 transition-all duration-500 ease-out ${isDark ? 'bg-white' : 'bg-gray-900'}`} />
             <div className={`absolute inset-[1px] rounded-lg transition-all duration-500 ease-out ${isDark ? 'bg-black/5' : 'bg-white/10'}`} />
             <span className={`relative z-10 flex items-center gap-2 transition-all duration-500 ease-out font-semibold ${isDark ? 'text-gray-900' : 'text-white'}`}>
               Read More Success Stories
-              <ArrowRight className="w-4 h-4 transition-all duration-500 ease-out group-hover:translate-x-1" />
+              <ArrowRight className="w-3.5 h-3.5 xs:w-4 xs:h-4 transition-all duration-500 ease-out group-hover:translate-x-1" />
             </span>
           </button>
         </div>
       </div>
 
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        .poppins {
+          font-family: 'Poppins', sans-serif;
+        }
+        
         .grain-overlay {
           position: relative;
         }
@@ -316,9 +403,31 @@ export const SuccessHighlights: React.FC = () => {
           border-radius: inherit;
           z-index: 1;
         }
-        
-        .poppins {
-          font-family: 'Poppins', sans-serif;
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+          .cursor-pointer {
+            -webkit-tap-highlight-color: transparent;
+          }
+        }
+
+        /* Smooth transitions */
+        .transition-all {
+          transform: translateZ(0);
+          backface-visibility: hidden;
+        }
+
+        /* Responsive grid optimizations */
+        @media (max-width: 639px) {
+          .grid {
+            gap: 0.5rem;
+          }
+        }
+
+        @media (min-width: 640px) and (max-width: 1023px) {
+          .grid {
+            gap: 0.75rem;
+          }
         }
       `}</style>
     </section>

@@ -1,4 +1,4 @@
-// components/OurStory.tsx
+// components/OurStory.tsx - Fully responsive across all devices
 import React, { useState, useEffect, useRef } from 'react';
 import { useTheme } from '../components/ThemeContext';
 import { 
@@ -14,8 +14,22 @@ export const OurStory: React.FC = () => {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [hoveredMilestone, setHoveredMilestone] = useState<number | null>(null);
   const [timeRemaining, setTimeRemaining] = useState(60);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth < 640);
+      setIsTablet(window.innerWidth >= 640 && window.innerWidth < 1024);
+    };
+    
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
 
   const chapters = [
     {
@@ -120,7 +134,6 @@ The future holds endless possibilities. New markets to enter, new challenges to 
     }
   ];
 
-  // Auto-play timer for changing chapters
   useEffect(() => {
     if (autoPlayRef.current) {
       clearInterval(autoPlayRef.current);
@@ -147,7 +160,6 @@ The future holds endless possibilities. New markets to enter, new challenges to 
     };
   }, [isAutoPlaying, chapters.length]);
 
-  // Countdown timer
   useEffect(() => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -205,14 +217,13 @@ The future holds endless possibilities. New markets to enter, new challenges to 
   const isFirstChapter = activeChapter === 0;
   const isLastChapter = activeChapter === chapters.length - 1;
 
-  // Calculate circular progress
-  const radius = 14;
+  const radius = isMobile ? 10 : isTablet ? 12 : 14;
   const circumference = 2 * Math.PI * radius;
   const progress = ((60 - timeRemaining) / 60) * circumference;
   const strokeDashoffset = circumference - progress;
 
   return (
-    <section className={`relative py-24 poppins pt-32 lg:pt-40 ${isDark ? 'bg-black' : 'bg-white'}`}>
+    <section className={`relative py-12 xs:py-16 sm:py-20 lg:py-24 poppins pt-20 xs:pt-24 sm:pt-28 lg:pt-32 ${isDark ? 'bg-black' : 'bg-white'}`}>
       {/* Background */}
       <div className="absolute inset-0 -z-10 transition-colors duration-500">
         <div className={`absolute inset-0 transition-colors duration-500 ${isDark ? 'bg-black' : 'bg-white'}`}>
@@ -225,18 +236,19 @@ The future holds endless possibilities. New markets to enter, new challenges to 
       {/* Grain overlay */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0">
         <div className="w-full h-full" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='${isDark ? '0.12' : '0.06'}'/%3E%3C/svg%3E")`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.12'/%3E%3C/svg%3E")`,
           backgroundRepeat: 'repeat',
           backgroundSize: '180px',
         }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-6xl xl:max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <div className="inline-block mb-4">
+        <div className="text-center mb-8 xs:mb-10 sm:mb-12">
+          <div className="inline-block mb-3 xs:mb-4">
             <span className={`
-              text-sm font-medium px-4 py-1.5 rounded-full
+              text-[10px] xs:text-xs sm:text-sm font-medium 
+              px-3 xs:px-4 py-1 xs:py-1.5 rounded-full
               transition-all duration-200
               ${isDark 
                 ? 'bg-white/10 text-white/80' 
@@ -246,82 +258,94 @@ The future holds endless possibilities. New markets to enter, new challenges to 
               Our Story
             </span>
           </div>
-          <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <h2 className={`
+            text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 xs:mb-4 px-2
+            ${isDark ? 'text-white' : 'text-gray-900'}
+          `}>
             A Journey of
-            <br />
+            <br className="hidden xs:block" />
+            <span className="xs:hidden"> </span>
             <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               Excellence & Impact
             </span>
           </h2>
-          <p className={`max-w-2xl mx-auto text-base sm:text-lg ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
+          <p className={`
+            max-w-2xl mx-auto text-xs xs:text-sm sm:text-base px-4
+            ${isDark ? 'text-white/60' : 'text-gray-600'}
+          `}>
             Explore our evolution from a bold idea to a global consultancy
           </p>
         </div>
 
         {/* Progress dots */}
-        <div className="flex justify-center gap-2 mb-8">
+        <div className="flex justify-center gap-1.5 xs:gap-2 mb-6 xs:mb-8">
           {chapters.map((_, idx) => (
             <button
               key={idx}
               onClick={() => goToChapter(idx)}
               className={`
-                h-1 rounded-full transition-all duration-300
+                h-1 xs:h-1.5 rounded-full transition-all duration-300
                 ${activeChapter === idx 
-                  ? `w-8 ${isDark ? 'bg-white' : 'bg-gray-900'}`
-                  : `w-4 ${isDark ? 'bg-white/20 hover:bg-white/30' : 'bg-gray-300 hover:bg-gray-400'}`
+                  ? `w-6 xs:w-8 ${isDark ? 'bg-white' : 'bg-gray-900'}`
+                  : `w-3 xs:w-4 ${isDark ? 'bg-white/20 hover:bg-white/30' : 'bg-gray-300 hover:bg-gray-400'}`
                 }
               `}
             />
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid lg:grid-cols-2 gap-6 xs:gap-8 lg:gap-12">
           {/* Left Side - Chapter Navigation */}
           <div className="order-2 lg:order-1">
             <div className={`
-              rounded-2xl p-6 border
+              rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border
               ${isDark 
                 ? 'bg-black/40 border-white/10' 
                 : 'bg-gray-50 border-gray-200'
               }
             `}>
-              <h3 className={`text-lg font-semibold mb-4 flex items-center gap-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                <Clock className="w-5 h-5" />
+              <h3 className={`
+                text-sm xs:text-base sm:text-lg font-semibold mb-3 xs:mb-4 
+                flex items-center gap-2 
+                ${isDark ? 'text-white' : 'text-gray-900'}
+              `}>
+                <Clock className="w-4 h-4 xs:w-5 xs:h-5" />
                 Timeline Explorer
               </h3>
               
-              <div className="space-y-2">
+              <div className="space-y-1.5 xs:space-y-2 max-h-[400px] sm:max-h-[500px] overflow-y-auto custom-scrollbar">
                 {chapters.map((chapter, idx) => (
                   <div
                     key={idx}
                     className={`
-                      group relative cursor-pointer rounded-xl p-3
+                      group relative cursor-pointer rounded-lg xs:rounded-xl p-2.5 xs:p-3
                       transition-all duration-300
                       ${activeChapter === idx 
                         ? (isDark ? 'bg-white/10' : 'bg-white shadow-sm')
                         : (isDark ? 'hover:bg-white/5' : 'hover:bg-white/50')
                       }
+                      ${!isMobile ? '' : 'active:bg-white/20'}
                     `}
                     onClick={() => goToChapter(idx)}
-                    onMouseEnter={() => setHoveredMilestone(idx)}
-                    onMouseLeave={() => setHoveredMilestone(null)}
+                    onMouseEnter={() => !isMobile && setHoveredMilestone(idx)}
+                    onMouseLeave={() => !isMobile && setHoveredMilestone(null)}
                   >
-                    <div className="flex items-center gap-3">
-                      {/* Circular progress indicator for active chapter */}
-                      <div className="relative w-10 h-10">
+                    <div className="flex items-center gap-2 xs:gap-3">
+                      {/* Circular progress indicator */}
+                      <div className="relative w-8 h-8 xs:w-10 xs:h-10 flex-shrink-0">
                         {isAutoPlaying && activeChapter === idx && (
                           <svg className="absolute inset-0 w-full h-full -rotate-90">
                             <circle
-                              cx="20"
-                              cy="20"
+                              cx="50%"
+                              cy="50%"
                               r={radius}
                               fill="none"
                               stroke={isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}
                               strokeWidth="2"
                             />
                             <circle
-                              cx="20"
-                              cy="20"
+                              cx="50%"
+                              cy="50%"
                               r={radius}
                               fill="none"
                               stroke={chapter.strokeColor}
@@ -340,27 +364,33 @@ The future holds endless possibilities. New markets to enter, new challenges to 
                             ? chapter.bgColor
                             : (isDark ? 'bg-white/5' : 'bg-gray-100')
                           }
-                          ${hoveredMilestone === idx ? 'scale-105' : 'scale-100'}
+                          ${hoveredMilestone === idx && !isMobile ? 'scale-105' : 'scale-100'}
                         `}>
-                          <chapter.icon className={`w-4 h-4 ${chapter.color}`} />
+                          <chapter.icon className={`w-3.5 h-3.5 xs:w-4 xs:h-4 ${chapter.color}`} />
                         </div>
                       </div>
                       
-                      <div className="flex-1">
-                        <div className="flex items-baseline gap-2">
-                          <span className={`text-sm font-bold ${chapter.color}`}>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-baseline gap-1.5 xs:gap-2 flex-wrap">
+                          <span className={`text-xs xs:text-sm font-bold ${chapter.color}`}>
                             {chapter.year}
                           </span>
-                          <span className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          <span className={`
+                            text-xs xs:text-sm font-semibold truncate
+                            ${isDark ? 'text-white' : 'text-gray-900'}
+                          `}>
                             {chapter.title}
                           </span>
                         </div>
-                        <p className={`text-xs ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
+                        <p className={`
+                          text-[10px] xs:text-xs truncate
+                          ${isDark ? 'text-white/50' : 'text-gray-500'}
+                        `}>
                           {chapter.subtitle}
                         </p>
                       </div>
                       {activeChapter === idx && !isAutoPlaying && (
-                        <CheckCircle className={`w-4 h-4 ${chapter.color}`} />
+                        <CheckCircle className={`w-3.5 h-3.5 xs:w-4 xs:h-4 flex-shrink-0 ${chapter.color}`} />
                       )}
                     </div>
                   </div>
@@ -368,13 +398,18 @@ The future holds endless possibilities. New markets to enter, new challenges to 
               </div>
 
               {/* Auto-play controls */}
-              <div className={`mt-4 pt-3 border-t flex items-center justify-between ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
-                <div className="flex gap-2">
+              <div className={`
+                mt-3 xs:mt-4 pt-3 border-t flex flex-col xs:flex-row items-stretch xs:items-center 
+                gap-2 xs:gap-0 xs:justify-between
+                ${isDark ? 'border-white/10' : 'border-gray-200'}
+              `}>
+                <div className="flex gap-1.5 xs:gap-2 justify-center xs:justify-start">
                   <button
                     onClick={() => setIsAutoPlaying(!isAutoPlaying)}
                     className={`
-                      flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-lg
-                      transition-all duration-300
+                      flex items-center gap-1.5 xs:gap-2 text-[10px] xs:text-xs font-medium 
+                      px-2.5 xs:px-3 py-1.5 rounded-lg
+                      transition-all duration-300 flex-1 xs:flex-none justify-center
                       ${isDark 
                         ? 'bg-white/10 hover:bg-white/20 text-white/80' 
                         : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
@@ -388,8 +423,9 @@ The future holds endless possibilities. New markets to enter, new challenges to 
                   <button
                     onClick={restartAutoPlay}
                     className={`
-                      flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-lg
-                      transition-all duration-300
+                      flex items-center gap-1.5 xs:gap-2 text-[10px] xs:text-xs font-medium 
+                      px-2.5 xs:px-3 py-1.5 rounded-lg
+                      transition-all duration-300 flex-1 xs:flex-none justify-center
                       ${isDark 
                         ? 'bg-white/10 hover:bg-white/20 text-white/80' 
                         : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
@@ -401,28 +437,30 @@ The future holds endless possibilities. New markets to enter, new challenges to 
                   </button>
                 </div>
                 
-                <div className="flex gap-1">
+                <div className="flex gap-1 justify-center">
                   <button 
                     onClick={prevChapter} 
                     disabled={isFirstChapter}
                     className={`
-                      p-1 rounded transition-all hover:scale-110
+                      p-1.5 xs:p-2 rounded-lg transition-all
+                      ${!isMobile ? 'hover:scale-110' : 'active:scale-95'}
                       ${isFirstChapter ? 'opacity-30 cursor-not-allowed' : ''}
                       ${isDark ? 'hover:bg-white/10' : 'hover:bg-gray-200'}
                     `}
                   >
-                    <ChevronLeft className="w-4 h-4" />
+                    <ChevronLeft className="w-3.5 h-3.5 xs:w-4 xs:h-4" />
                   </button>
                   <button 
                     onClick={nextChapter} 
                     disabled={isLastChapter}
                     className={`
-                      p-1 rounded transition-all hover:scale-110
+                      p-1.5 xs:p-2 rounded-lg transition-all
+                      ${!isMobile ? 'hover:scale-110' : 'active:scale-95'}
                       ${isLastChapter ? 'opacity-30 cursor-not-allowed' : ''}
                       ${isDark ? 'hover:bg-white/10' : 'hover:bg-gray-200'}
                     `}
                   >
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight className="w-3.5 h-3.5 xs:w-4 xs:h-4" />
                   </button>
                 </div>
               </div>
@@ -430,26 +468,29 @@ The future holds endless possibilities. New markets to enter, new challenges to 
 
             {/* Quote Card */}
             <div className={`
-              mt-4 rounded-2xl p-6 border
+              mt-3 xs:mt-4 rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border
               ${isDark 
                 ? 'bg-black/40 border-white/10' 
                 : 'bg-gray-50 border-gray-200'
               }
             `}>
-              <Quote className={`w-8 h-8 mb-3 ${isDark ? 'text-white/40' : 'text-gray-400'}`} />
-              <p className={`text-sm italic mb-3 ${isDark ? 'text-white/70' : 'text-gray-700'}`}>
+              <Quote className={`w-6 h-6 xs:w-8 xs:h-8 mb-2 xs:mb-3 ${isDark ? 'text-white/40' : 'text-gray-400'}`} />
+              <p className={`
+                text-xs xs:text-sm italic mb-3 
+                ${isDark ? 'text-white/70' : 'text-gray-700'}
+              `}>
                 "Every challenge we faced became an opportunity. Every client we served became family. 
                 This isn't just our story - it's the story of everyone who believed in us."
               </p>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">YM</span>
+              <div className="flex items-center gap-2 xs:gap-3">
+                <div className="w-7 h-7 xs:w-8 xs:h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                  <span className="text-[10px] xs:text-xs font-bold text-white">YM</span>
                 </div>
                 <div>
                   <div className={`text-xs font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     Yimer Mekonnen
                   </div>
-                  <div className={`text-xs ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
+                  <div className={`text-[10px] xs:text-xs ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
                     Founder & CEO
                   </div>
                 </div>
@@ -460,7 +501,7 @@ The future holds endless possibilities. New markets to enter, new challenges to 
           {/* Right Side - Active Chapter Display */}
           <div className="order-1 lg:order-2">
             <div className={`
-              relative rounded-2xl p-8 border
+              relative rounded-xl xs:rounded-2xl p-5 xs:p-6 sm:p-8 border
               transition-all duration-500 ease-out
               animate-fade-in
               ${isDark 
@@ -469,9 +510,9 @@ The future holds endless possibilities. New markets to enter, new challenges to 
               }
             `}>
               {/* Year badge */}
-              <div className="inline-flex mb-6">
+              <div className="inline-flex mb-4 xs:mb-5 sm:mb-6">
                 <span className={`
-                  text-2xl font-bold px-3 py-1.5 rounded-lg
+                  text-xl xs:text-2xl font-bold px-2.5 xs:px-3 py-1 xs:py-1.5 rounded-lg
                   ${currentChapter.color}
                   ${isDark ? 'bg-white/5' : 'bg-gray-100'}
                 `}>
@@ -480,17 +521,27 @@ The future holds endless possibilities. New markets to enter, new challenges to 
               </div>
 
               {/* Title */}
-              <h3 className={`text-2xl sm:text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              <h3 className={`
+                text-xl xs:text-2xl sm:text-3xl font-bold mb-1.5 xs:mb-2 
+                ${isDark ? 'text-white' : 'text-gray-900'}
+              `}>
                 {currentChapter.title}
               </h3>
-              <p className={`text-sm mb-4 ${currentChapter.color}`}>
+              <p className={`text-xs xs:text-sm mb-3 xs:mb-4 ${currentChapter.color}`}>
                 {currentChapter.subtitle}
               </p>
 
               {/* Full story */}
-              <div className={`space-y-3 mb-6 max-h-96 overflow-y-auto pr-2 custom-scrollbar`}>
+              <div className={`
+                space-y-2 xs:space-y-3 mb-4 xs:mb-5 sm:mb-6 
+                max-h-64 xs:max-h-72 sm:max-h-80 md:max-h-96 
+                overflow-y-auto pr-2 custom-scrollbar
+              `}>
                 {currentChapter.fullStory.split('\n\n').map((paragraph, idx) => (
-                  <p key={idx} className={`text-sm leading-relaxed ${isDark ? 'text-white/70' : 'text-gray-700'}`}>
+                  <p key={idx} className={`
+                    text-xs xs:text-sm leading-relaxed 
+                    ${isDark ? 'text-white/70' : 'text-gray-700'}
+                  `}>
                     {paragraph}
                   </p>
                 ))}
@@ -498,27 +549,27 @@ The future holds endless possibilities. New markets to enter, new challenges to 
 
               {/* Achievement & Metric */}
               <div className={`
-                flex flex-col sm:flex-row gap-3 pt-4 border-t
+                flex flex-col sm:flex-row gap-2 xs:gap-3 pt-3 xs:pt-4 border-t
                 ${isDark ? 'border-white/10' : 'border-gray-200'}
               `}>
                 <div className="flex-1 flex items-center gap-2">
-                  <Award className={`w-4 h-4 ${currentChapter.color}`} />
+                  <Award className={`w-3.5 h-3.5 xs:w-4 xs:h-4 flex-shrink-0 ${currentChapter.color}`} />
                   <div>
-                    <div className={`text-xs ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
+                    <div className={`text-[9px] xs:text-xs ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
                       Key Achievement
                     </div>
-                    <div className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className={`text-xs xs:text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       {currentChapter.achievement}
                     </div>
                   </div>
                 </div>
                 <div className="flex-1 flex items-center gap-2">
-                  <TrendingUp className={`w-4 h-4 ${currentChapter.color}`} />
+                  <TrendingUp className={`w-3.5 h-3.5 xs:w-4 xs:h-4 flex-shrink-0 ${currentChapter.color}`} />
                   <div>
-                    <div className={`text-xs ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
+                    <div className={`text-[9px] xs:text-xs ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
                       Impact Metric
                     </div>
-                    <div className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className={`text-xs xs:text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       {currentChapter.metric}
                     </div>
                   </div>
@@ -529,14 +580,16 @@ The future holds endless possibilities. New markets to enter, new challenges to 
         </div>
 
         {/* Navigation hint */}
-        <div className="text-center mt-8">
-          <p className={`text-xs ${isDark ? 'text-white/30' : 'text-gray-400'}`}>
+        <div className="text-center mt-6 xs:mt-8">
+          <p className={`text-[10px] xs:text-xs ${isDark ? 'text-white/30' : 'text-gray-400'}`}>
             {isFirstChapter ? 'Start of journey' : isLastChapter ? 'End of journey - Be part of our future' : `Chapter ${activeChapter + 1} of ${chapters.length}`}
           </p>
         </div>
       </div>
 
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
         .poppins {
           font-family: 'Poppins', sans-serif;
         }
@@ -557,7 +610,13 @@ The future holds endless possibilities. New markets to enter, new challenges to 
         }
         
         .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
+          width: 3px;
+        }
+        
+        @media (min-width: 640px) {
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+          }
         }
         
         .custom-scrollbar::-webkit-scrollbar-track {
@@ -572,6 +631,19 @@ The future holds endless possibilities. New markets to enter, new challenges to 
         
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: ${isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'};
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+          .hover\\:scale-110:active {
+            transform: scale(1.1);
+          }
+        }
+
+        /* Smooth transitions */
+        .transition-all {
+          transform: translateZ(0);
+          backface-visibility: hidden;
         }
       `}</style>
     </section>
