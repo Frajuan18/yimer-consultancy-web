@@ -1,4 +1,4 @@
-// Hero.tsx - Fixed to show both sides on all pages
+// Hero.tsx - Complete fixed version
 import React, { useState } from 'react';
 import { useTheme } from './ThemeContext';
 import { ArrowRight, ChevronRight, Shield, Zap, TrendingUp, Target, LineChart, Headphones, Briefcase, BarChart, Award } from 'lucide-react';
@@ -65,7 +65,9 @@ export const Hero: React.FC = () => {
         }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Main Container - MATCHES NAVBAR EXACTLY */}
+      <div className="relative z-10 max-w-6xl mx-auto px-4">
+        
         {/* Two column layout - stacks on mobile, side by side on desktop */}
         <div className="flex flex-col lg:flex-row lg:gap-12">
           
@@ -293,7 +295,7 @@ export const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - Hidden on mobile */}
       <div className="hidden sm:block absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <div className={`w-6 h-10 rounded-full border-2 flex justify-center ${
           isDark ? 'border-white/30' : 'border-gray-300'
