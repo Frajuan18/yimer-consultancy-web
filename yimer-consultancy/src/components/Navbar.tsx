@@ -203,12 +203,12 @@ export const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Higher z-index to ensure visibility */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-40 md:hidden">
+        <div className="fixed inset-0 z-[100] md:hidden">
           {/* Backdrop */}
           <div 
-            className={`absolute inset-0 transition-all duration-300 backdrop-blur-sm ${isDark ? 'bg-black/70' : 'bg-white/60'}`}
+            className={`absolute inset-0 transition-all duration-300 backdrop-blur-sm ${isDark ? 'bg-black/80' : 'bg-white/70'}`}
             onClick={toggleMenu}
           />
           
@@ -220,8 +220,8 @@ export const Navbar: React.FC = () => {
               border shadow-2xl
               animate-slide-in grain-overlay
               ${isDark 
-                ? 'bg-black/90 border-white/8' 
-                : 'bg-white/95 border-black/8'
+                ? 'bg-black/95 border-white/10' 
+                : 'bg-white/98 border-black/10'
               }
             `}
             style={{ fontFamily: 'Poppins, sans-serif' }}
@@ -236,8 +236,8 @@ export const Navbar: React.FC = () => {
                     px-4 py-3 rounded-xl
                     transition-all duration-200
                     ${location.pathname === link.href
-                      ? (isDark ? 'bg-white/15 text-white' : 'bg-black/10 text-gray-900')
-                      : (isDark ? 'text-white/80 hover:text-white hover:bg-white/10' : 'text-gray-700 hover:text-gray-900 hover:bg-black/5')
+                      ? (isDark ? 'bg-white/20 text-white' : 'bg-black/10 text-gray-900')
+                      : (isDark ? 'text-white/90 hover:text-white hover:bg-white/15' : 'text-gray-800 hover:text-gray-900 hover:bg-black/8')
                     }
                   `}
                   onClick={toggleMenu}
@@ -253,7 +253,7 @@ export const Navbar: React.FC = () => {
                     style={{ fontFamily: 'Poppins, sans-serif' }}
                   >
                     <div className={`absolute inset-0 transition-all duration-300 ${isDark ? 'bg-white' : 'bg-gray-900'}`} />
-                    <div className={`absolute inset-[1px] rounded-xl transition-all duration-300 ${isDark ? 'bg-black/5' : 'bg-white/10'}`} />
+                    <div className={`absolute inset-[1px] rounded-xl transition-all duration-300 ${isDark ? 'bg-black/8' : 'bg-white/15'}`} />
                     <span className={`relative z-10 transition-all duration-300 font-semibold ${isDark ? 'text-gray-900' : 'text-white'}`}>
                       Get Started
                     </span>
