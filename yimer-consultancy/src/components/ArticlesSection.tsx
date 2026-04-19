@@ -251,12 +251,7 @@ export const ArticlesSection: React.FC = () => {
     }
   };
 
-  const formatViews = (views: number) => {
-    if (views >= 1000) {
-      return (views / 1000).toFixed(1) + 'K';
-    }
-    return views.toString();
-  };
+  
 
   const currentCategory = categories.find(c => c.id === activeCategory);
 
